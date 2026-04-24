@@ -3,7 +3,17 @@ import { useAuthStore } from "../stores/auth.store";
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const token = useAuthStore((s) => s.token);
-  return token ? <Navigate to="/" replace /> : <>{children}</>;
+  const user = useAuthStore((s) => s.user);
+
+  if (!token || !user) {
+    return <>{children}</>;
+  }
+
+  return user.role === "admin" ? (
+    <Navigate to="/admin-manage-account" replace />
+  ) : (
+    <Navigate to="/dashboard" replace />
+  );
 };
 
 export default PublicRoute;

@@ -6,7 +6,7 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 3000,
 });
-
+  
 api.interceptors.request.use((config) => {
   // Access the state outside of a React component
   const token = useAuthStore.getState().token;

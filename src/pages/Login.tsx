@@ -1,8 +1,9 @@
 import { useAuthStore } from "@/stores/auth.store";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const Login = () => {
+  const { portal } = useParams();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,18 +12,38 @@ const Login = () => {
   const { login, register, isLoading, error } = useAuthStore();
   const navigate = useNavigate();
 
+  const activePortal = useMemo<"user" | "trainer" | "admin">(() => {
+    if (portal === "trainer" || portal === "admin") {
+      return portal;
+    }
+    return "user";
+  }, [portal]);
+
+  const isUserPortal = activePortal === "user";
+
+  const titleByPortal: Record<"user" | "trainer" | "admin", string> = {
+    user: "User",
+    trainer: "Trainer",
+    admin: "Admin",
+  };
+
+  useEffect(() => {
+    if (!isUserPortal && isSignUp) {
+      setIsSignUp(false);
+    }
+  }, [isUserPortal, isSignUp]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      if (isSignUp) {
+      if (isSignUp && isUserPortal) {
         await register(name, email, password);
       } else {
-        await login(email, password);
+        await login(email, password, activePortal);
       }
-      navigate("/dashboard"); // ✅ redirect after success
+      navigate(activePortal === "admin" ? "/admin-manage-account" : "/dashboard");
     } catch (err: any) {
-      // error is handled in store, but you can also catch axios errors here
       const message = err.response?.data?.message || "Something went wrong";
       useAuthStore.setState({ error: message, isLoading: false });
     }
@@ -37,18 +58,18 @@ const Login = () => {
       <div className="relative w-full max-w-100">
         <div className="mb-8 text-center">
           <h1 className="font-serif text-3xl font-semibold tracking-tight text-foreground">
-            {isSignUp ? "Create account" : "Welcome back"}
+            {isSignUp ? "Create user account" : `${titleByPortal[activePortal]} portal`}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {isSignUp
-              ? "Enter your details to get started"
-              : "Sign in to your account"}
+              ? "Create your user profile to get started"
+              : `Sign in as ${titleByPortal[activePortal].toLowerCase()}`}
           </p>
         </div>
 
         <div className="rounded-lg border border-border bg-card p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
-            {isSignUp && (
+            {isSignUp && isUserPortal && (
               <div className="space-y-2">
                 <label
                   htmlFor="name"
@@ -111,6 +132,12 @@ const Login = () => {
               />
             </div>
 
+            {!isUserPortal && (
+              <p className="text-xs text-muted-foreground">
+                Account creation for this portal is managed by admin.
+              </p>
+            )}
+
             {error && <p className="text-sm text-red-500">{error}</p>}
 
             <button
@@ -121,7 +148,7 @@ const Login = () => {
               {isLoading
                 ? "Please wait..."
                 : isSignUp
-                ? "Create account"
+                ? "Create user account"
                 : "Sign in"}
             </button>
           </form>
@@ -155,15 +182,31 @@ const Login = () => {
           </button>
         </div>
 
+        <div className="mt-4 flex items-center justify-center gap-4 text-xs text-muted-foreground">
+          <Link to="/login/user" className="transition-colors hover:text-primary">
+            User login
+          </Link>
+          <span>•</span>
+          <Link to="/login/trainer" className="transition-colors hover:text-primary">
+            Trainer login
+          </Link>
+        </div>
+
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-          <button
-            type="button"
-            onClick={() => setIsSignUp(!isSignUp)}
-            className="font-medium text-primary transition-colors hover:text-primary/80"
-          >
-            {isSignUp ? "Sign in" : "Create account"}
-          </button>
+          {isUserPortal ? (
+            <>
+              {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+              <button
+                type="button"
+                onClick={() => setIsSignUp(!isSignUp)}
+                className="font-medium text-primary transition-colors hover:text-primary/80"
+              >
+                {isSignUp ? "Sign in" : "Create account"}
+              </button>
+            </>
+          ) : (
+            "Trainer and admin accounts are provisioned by admin."
+          )}
         </p>
       </div>
     </div>
