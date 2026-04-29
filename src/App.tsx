@@ -23,6 +23,9 @@ const queryClient = new QueryClient();
 const App = () => {
   const hasHydrated = useAuthStore((s) => s.hasHydrated);
   const isCheckingSession = useAuthStore((s) => s.isCheckingSession);
+  const token = useAuthStore((s) => s.token);
+  const user = useAuthStore((s) => s.user);
+  const isGuest = !token || !user;
 
   if (!hasHydrated || isCheckingSession) {
     return (
@@ -42,7 +45,10 @@ const App = () => {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/status" element={<Status />} />
+          <Route
+            path="/status"
+            element={isGuest ? <Navigate to="/plans" replace /> : <Status />}
+          />
 
           <Route
             path="/login/:portal"
@@ -52,12 +58,38 @@ const App = () => {
               </PublicRoute>
             }
           />
-          <Route path="/login" element={<Navigate to="/login/user" replace />} />
+          <Route
+            path="/login"
+            element={<Navigate to="/login/user" replace />}
+          />
 
           <Route path="/" element={<Index />} />
           <Route path="/plans" element={<Plans />} />
-          <Route path="/payment" element={<Payment />} />
-          <Route path="/booking" element={<Booking />} />
+          <Route path="/plan" element={<Navigate to="/plans" replace />} />
+          <Route
+            path="/payment"
+            element={
+              isGuest ? (
+                <Navigate to="/plans" replace />
+              ) : (
+                <ProtectedRoute>
+                  <Payment />
+                </ProtectedRoute>
+              )
+            }
+          />
+          <Route
+            path="/booking"
+            element={
+              isGuest ? (
+                <Navigate to="/plans" replace />
+              ) : (
+                <ProtectedRoute>
+                  <Booking />
+                </ProtectedRoute>
+              )
+            }
+          />
           <Route
             path="/dashboard"
             element={
@@ -78,7 +110,10 @@ const App = () => {
             path="/admin-manage-acount"
             element={<Navigate to="/admin-manage-account" replace />}
           />
-          <Route path="*" element={<NotFound />} />
+          <Route
+            path="*"
+            element={isGuest ? <Navigate to="/" replace /> : <NotFound />}
+          />
         </Routes>
       </BrowserRouter>
 

@@ -12,7 +12,7 @@
     --popover: 0 0% 7%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 18 100% 55%;
+    --primary: 16 82% 50%;
     --primary-foreground: 0 0% 4%;
 
     --secondary: 0 0% 12%;
@@ -21,7 +21,7 @@
     --muted: 0 0% 12%;
     --muted-foreground: 0 0% 55%;
 
-    --accent: 18 100% 55%;
+    --accent: 16 82% 50%;
     --accent-foreground: 0 0% 4%;
 
     --destructive: 0 72% 51%;
@@ -29,24 +29,24 @@
 
     --border: 0 0% 14%;
     --input: 0 0% 14%;
-    --ring: 18 100% 55%;
+    --ring: 16 78% 52%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 6%;
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 18 100% 55%;
+    --sidebar-primary: 16 80% 49%;
     --sidebar-primary-foreground: 0 0% 4%;
     --sidebar-accent: 0 0% 12%;
     --sidebar-accent-foreground: 0 0% 95%;
     --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 18 100% 55%;
+    --sidebar-ring: 16 78% 52%;
 
     /* Custom tokens */
     --surface: 0 0% 10%;
     --surface-hover: 0 0% 14%;
     --text-dim: 0 0% 45%;
-    --glow: 18 100% 55%;
+    --glow: 16 76% 48%;
 
     --font-display: "Space Grotesk", sans-serif;
     --font-body: "Inter", sans-serif;
@@ -80,6 +80,10 @@
 }
 
 @layer base {
+  .container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
   * {
     @apply border-border;
   }

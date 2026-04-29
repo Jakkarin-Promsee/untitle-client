@@ -6,6 +6,7 @@ import type {
   EnvVar,
   ServerCheck,
 } from "@/stores/status.store";
+import Navbar from "@/components/Navbar";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -375,8 +376,10 @@ export default function Status() {
   }[overallStatus] ?? { bar: "bg-red-500", glow: "" };
 
   return (
-    <div className="min-h-screen bg-[--color-background] px-4 py-10 transition-colors duration-500">
-      <div className="max-w-5xl mx-auto space-y-8">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-[--color-background] px-4 py-10 pt-24 transition-colors duration-500">
+        <div className="max-w-5xl mx-auto space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -513,7 +516,8 @@ export default function Status() {
           </p>
           <div className="h-px flex-1 bg-[--color-border]" />
         </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

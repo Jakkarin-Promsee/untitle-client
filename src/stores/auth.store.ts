@@ -22,7 +22,11 @@ interface AuthState {
     portal?: "user" | "trainer" | "admin",
   ) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
-  createTrainer: (name: string, email: string, password: string) => Promise<void>;
+  createTrainer: (
+    name: string,
+    email: string,
+    password: string,
+  ) => Promise<void>;
   validateSession: () => Promise<void>;
   setHasHydrated: (value: boolean) => void;
   logout: () => void;
@@ -95,7 +99,7 @@ export const useAuthStore = create<AuthState>()(
         }
 
         set({ isCheckingSession: true });
-
+        console.log("Checking session...", token);
         try {
           const res = await api.get("/auth/me");
           set({

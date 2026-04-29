@@ -1,6 +1,6 @@
 import { useAuthStore } from "@/stores/auth.store";
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 const Login = () => {
   const { portal } = useParams();
@@ -11,6 +11,7 @@ const Login = () => {
 
   const { login, register, isLoading, error } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const activePortal = useMemo<"user" | "trainer" | "admin">(() => {
     if (portal === "trainer" || portal === "admin") {
@@ -42,7 +43,17 @@ const Login = () => {
       } else {
         await login(email, password, activePortal);
       }
-      navigate(activePortal === "admin" ? "/admin-manage-account" : "/dashboard");
+
+      const redirectPath = location.state?.from;
+      const paymentState = location.state?.paymentState;
+
+      if (typeof redirectPath === "string") {
+        navigate(redirectPath, { state: paymentState });
+      } else {
+        navigate(
+          activePortal === "admin" ? "/admin-manage-account" : "/dashboard",
+        );
+      }
     } catch (err: any) {
       const message = err.response?.data?.message || "Something went wrong";
       useAuthStore.setState({ error: message, isLoading: false });
@@ -51,14 +62,23 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <Link
+        to="/"
+        className="absolute left-4 top-4 z-10 text-sm text-muted-foreground transition-colors hover:text-primary"
+      >
+        ← Back to home
+      </Link>
+
+      <div className="pt-8 pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute left-1/2 top-1/3 h-120 w-120 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[120px]" />
       </div>
 
       <div className="relative w-full max-w-100">
         <div className="mb-8 text-center">
           <h1 className="font-serif text-3xl font-semibold tracking-tight text-foreground">
-            {isSignUp ? "Create user account" : `${titleByPortal[activePortal]} portal`}
+            {isSignUp
+              ? "Create user account"
+              : `${titleByPortal[activePortal]} portal`}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {isSignUp
@@ -148,8 +168,8 @@ const Login = () => {
               {isLoading
                 ? "Please wait..."
                 : isSignUp
-                ? "Create user account"
-                : "Sign in"}
+                  ? "Create user account"
+                  : "Sign in"}
             </button>
           </form>
 
@@ -183,11 +203,17 @@ const Login = () => {
         </div>
 
         <div className="mt-4 flex items-center justify-center gap-4 text-xs text-muted-foreground">
-          <Link to="/login/user" className="transition-colors hover:text-primary">
+          <Link
+            to="/login/user"
+            className="transition-colors hover:text-primary"
+          >
             User login
           </Link>
           <span>•</span>
-          <Link to="/login/trainer" className="transition-colors hover:text-primary">
+          <Link
+            to="/login/trainer"
+            className="transition-colors hover:text-primary"
+          >
             Trainer login
           </Link>
         </div>

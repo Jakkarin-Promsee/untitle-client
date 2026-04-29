@@ -4,6 +4,7 @@ import { X, Minus, Plus, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/stores/auth.store";
 
 interface TransactionModalProps {
   isOpen: boolean;
@@ -19,6 +20,8 @@ const TransactionModal = ({ isOpen, onClose, course }: TransactionModalProps) =>
   const [sessions, setSessions] = useState(1);
   const [healthNote, setHealthNote] = useState("");
   const navigate = useNavigate();
+  const token = useAuthStore((s) => s.token);
+  const user = useAuthStore((s) => s.user);
 
   if (!course) return null;
 
@@ -75,7 +78,7 @@ const TransactionModal = ({ isOpen, onClose, course }: TransactionModalProps) =>
             <div className="mt-6">
               <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                 <AlertTriangle className="h-4 w-4 text-primary" />
-                Allergies / Injuries (Required)
+                Allergies / Injuries (Optional)
               </label>
               <Textarea
                 value={healthNote}
@@ -92,10 +95,20 @@ const TransactionModal = ({ isOpen, onClose, course }: TransactionModalProps) =>
 
             <Button
               onClick={() => {
+                const paymentState = { course, sessions, total, healthNote };
                 onClose();
-                navigate("/payment", { state: { course, sessions, total, healthNote } });
+                if (!token || !user) {
+                  navigate("/login/user", {
+                    state: {
+                      from: "/payment",
+                      paymentState,
+                    },
+                  });
+                  return;
+                }
+
+                navigate("/payment", { state: paymentState });
               }}
-              disabled={!healthNote.trim()}
               className="mt-4 w-full font-display font-semibold tracking-wide"
               size="lg"
             >

@@ -9,18 +9,18 @@ const Index = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen overflow-x-hidden bg-background">
       <Navbar />
 
       {/* Hero */}
-      <section className="relative flex min-h-[70vh] items-center overflow-hidden pt-16">
+      <section className="relative flex min-h-[70vh] items-center overflow-hidden pt-20">
         <div className="absolute inset-0">
           <img
             src={heroImage}
             alt="Calisthenics athlete"
             className="h-full w-full object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/40" />
+          <div className="absolute inset-0 bg-linear-to-r from-background via-background/90 to-background/40" />
         </div>
 
         <div className="container relative z-10 py-20">
@@ -94,7 +94,7 @@ const Index = () => {
             viewport={{ once: true }}
             whileHover={{ y: -6 }}
             className="group relative flex flex-col rounded-xl border border-border bg-card p-8 card-hover cursor-pointer overflow-hidden"
-            onClick={() => navigate("/plans")}
+            onClick={() => navigate("/plans#online")}
           >
             <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/10 transition-colors" />
             <div className="relative">
@@ -133,7 +133,7 @@ const Index = () => {
                 size="lg"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate("/plans");
+                  navigate("/plans#online");
                 }}
               >
                 VIEW ONLINE PLANS <ArrowRight className="ml-2 h-4 w-4" />
@@ -148,11 +148,11 @@ const Index = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
             whileHover={{ y: -6 }}
-            className="group relative flex flex-col rounded-xl border-2 border-primary/40 border-glow bg-card p-8 card-hover cursor-pointer overflow-hidden"
-            onClick={() => navigate("/plans")}
+            className="group relative flex flex-col rounded-xl border-2 border-primary/40 border-glow bg-card p-8 card-hover cursor-pointer  overflow-y-visible"
+            onClick={() => navigate("/plans#onsite")}
           >
-            <div className="absolute -top-3 left-8 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground z-10">
-              RECOMMENDED
+            <div className="absolute -top-3 left-6 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground z-0">
+              MOST POPULAR
             </div>
             <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/10 transition-colors" />
             <div className="relative">
@@ -191,7 +191,7 @@ const Index = () => {
                 size="lg"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate("/plans");
+                  navigate("/plans#onsite");
                 }}
               >
                 VIEW ONSITE PLANS <ArrowRight className="ml-2 h-4 w-4" />

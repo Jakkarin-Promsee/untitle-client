@@ -37,7 +37,10 @@ const AdminManageAccount = () => {
 
         <form onSubmit={handleCreateTrainer} className="mt-6 space-y-4">
           <div className="space-y-2">
-            <label htmlFor="trainer-name" className="block text-sm text-secondary-foreground">
+            <label
+              htmlFor="trainer-name"
+              className="block text-sm text-secondary-foreground"
+            >
               Trainer Name
             </label>
             <input
@@ -51,7 +54,10 @@ const AdminManageAccount = () => {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="trainer-email" className="block text-sm text-secondary-foreground">
+            <label
+              htmlFor="trainer-email"
+              className="block text-sm text-secondary-foreground"
+            >
               Trainer Email
             </label>
             <input
@@ -65,7 +71,10 @@ const AdminManageAccount = () => {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="trainer-password" className="block text-sm text-secondary-foreground">
+            <label
+              htmlFor="trainer-password"
+              className="block text-sm text-secondary-foreground"
+            >
               Temporary Password
             </label>
             <input
