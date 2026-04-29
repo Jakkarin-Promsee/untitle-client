@@ -95,7 +95,9 @@ const TransactionModal = ({ isOpen, onClose, course }: TransactionModalProps) =>
 
             <Button
               onClick={() => {
-                const paymentState = { course, sessions, total, healthNote };
+                const paymentState = {
+                  openPaymentFlow: true,
+                };
                 onClose();
                 if (!token || !user) {
                   navigate("/login/user", {
