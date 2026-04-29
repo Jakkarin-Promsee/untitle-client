@@ -17,6 +17,8 @@ import Payment from "./pages/Payment";
 import Booking from "./pages/Booking";
 import Dashboard from "./pages/Dashboard";
 import AdminManageAccount from "@/pages/AdminManageAccount";
+import { SkillIndex } from "./components/skill-tree/SkillIndex";
+import { EvaluatePage } from "./components/skill-tree/evaluate";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +51,9 @@ const App = () => {
             path="/status"
             element={isGuest ? <Navigate to="/plans" replace /> : <Status />}
           />
+
+          <Route path="/skilltree" element={<SkillIndex />} />
+          <Route path="/skilltree/evaluate" element={<EvaluatePage />} />
 
           <Route
             path="/login/:portal"

@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertTriangle, User, MessageCircle, X } from "lucide-react";
+import {
+  AlertTriangle,
+  User,
+  MessageCircle,
+  X,
+  Crosshair,
+  ChevronRight,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 
 const upcomingBookings = [
@@ -49,6 +57,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background relative">
       <Navbar />
+
       <div className="container max-w-4xl pt-20 pb-16">
         {/* Warning */}
         <motion.div
@@ -68,6 +77,28 @@ const Dashboard = () => {
             </p>
           </div>
         </motion.div>
+
+        <Link
+          to="/skilltree"
+          className="group mt-4 flex items-center justify-between rounded-xl border border-primary/40 bg-linear-to-r from-primary/10 via-primary/5 to-card p-4 transition-all duration-300 hover:border-primary hover:shadow-[0_0_24px_-8px_hsl(var(--primary)/0.35)]"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/15 ring-1 ring-primary/30">
+              <Crosshair className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <p className="font-display text-base font-bold text-foreground">
+                Skill Tree
+              </p>
+              <p className="text-xs text-muted-foreground">
+                View progression, unlocks, and body evaluation.
+              </p>
+            </div>
+          </div>
+          <div className="rounded-lg bg-primary px-3 py-2 text-primary-foreground transition-transform duration-200 group-hover:translate-x-0.5">
+            <ChevronRight className="h-5 w-5" />
+          </div>
+        </Link>
 
         {/* Bookings */}
         <div className="mt-8">
